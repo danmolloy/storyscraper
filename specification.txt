@@ -1,0 +1,13 @@
+Basic Spec:
+
+1 - start on first page of story
+2 - copy the html source to memory
+3 - Keep important header metadata, basic style info, and story text. Delete everything else.
+4 - Alter formatting if necessary
+5 - Automatically go to next page of story
+6 - copy html source to memory
+7 - copy story text
+8 - Alter format if needed
+9 - Append to previous chapter
+10 - GOTO 5
+11 - When finished last page, save file to disk
