@@ -18,10 +18,10 @@ def setup
             <html lang=\"en\">
             <head>
             <meta http-equiv=\"content-type\" content=\"application/xhtml+xml; charset=UTF-8\" >
-            <title>Worm</title>
+            <title>Unsong</title>
             </head>
             <body>"
-  output_filename = 'worm9.html'
+  output_filename = 'unsong3.html'
   FileUtils.touch(output_filename)
   output_file = File.open("./#{output_filename}", "w+")
   output_file << header
@@ -30,12 +30,17 @@ end
 def main
   puts "\n\nSCRAPER STARTING\n\n"
   output_file = setup
-  toc = "https://parahumans.wordpress.com/table-of-contents/"
+  toc = "http://unsongbook.com/"
   puts "starting at: #{toc}"
   agent = Mechanize.new
-  toc_page = agent.get(toc)
-  toc_page = remove_nodes(toc_page, "#jp-post-flair")
-  links = toc_page.css("#content div.entry-content a")
+  begin
+    toc_page = agent.get(toc)
+  rescue Exception => e
+    puts e
+    retry
+  end
+  toc_page = remove_nodes(toc_page.at_css(".pjgm-postcontent"), '.sharedaddy')
+  links = toc_page.css("a")
   hrefs = []
   links.each do |link|
     hrefs << link['href']
@@ -43,17 +48,17 @@ def main
   hrefs.uniq!
   puts hrefs
 
-  hrefs.first(5).each do |url|
-    delay(3.0, 2.0)
+  hrefs.each do |url|
     page = agent.get(url)
-    title = page.at_css('.entry-title').text
-    body = page.at_css('.entry-content')
-    body_text = strip_nav(body.css('p'))
+    title = page.at_css('.pjgm-posttitle').text
+    body = remove_nodes(page.at_css('.pjgm-postcontent'), '.sharedaddy')
     puts "Current title: #{title}"
 
     output_file << "<h1 style=\"page-break-before:always;\">#{title}</h1>"
-    output_file << "#{body_text}"
-
+    ps = body.css('p')
+    ps.each do |p|
+      output_file << p
+    end
   end
 
   finish(output_file)

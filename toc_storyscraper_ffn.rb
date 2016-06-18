@@ -18,10 +18,10 @@ def setup
             <html lang=\"en\">
             <head>
             <meta http-equiv=\"content-type\" content=\"application/xhtml+xml; charset=UTF-8\" >
-            <title>Practice of Rationality</title>
+            <title>Time Braid</title>
             </head>
             <body>"
-  output_filename = 'dmpor.html'
+  output_filename = 'timebraid.html'
   FileUtils.touch(output_filename)
   output_file = File.open("./#{output_filename}", "w+")
   output_file << header
@@ -32,10 +32,10 @@ def main
   output_file = setup
   agent = Mechanize.new
   start = 1
-  last = 62
+  last = 31
 
   (start..last).each do |index|
-    page = agent.get("https://www.fanfiction.net/s/11223914/#{index}/Draco-Malfoy-and-the-Practice-of-Rationality")
+    page = agent.get("https://www.fanfiction.net/s/5193644/#{index}/Time-Braid")
     delay(4.0, 2.0)
     options = page.css('#chap_select option')
     title = ""
